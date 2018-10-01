@@ -1,4 +1,4 @@
-## Creating a cryptographicallyy secure password hash 
+## Creating a cryptographically secure password hash 
 
 This C# class library provides two methods: 
 
