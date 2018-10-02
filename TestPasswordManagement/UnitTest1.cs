@@ -33,13 +33,17 @@ namespace TestPasswordManagement
         [TestMethod]
         public void TestRandomPasswords()
         {
-            const int SALT_LENGTH = 32;
-            const int LOOP_TIMES = 250;
+            // This tests a couple of minutes to complete. 
+            int randomPasswordLength;
+            Random r = new Random();
+            const int LOOP_TIMES = 5000;
 
-            for (int i = 0; i < LOOP_TIMES; i++) {
+            for (int i = 0; i < LOOP_TIMES; i++)
+            {
                 // Generate a random password. 
                 RNGCryptoServiceProvider passwordMaker = new RNGCryptoServiceProvider();
-                byte[] passwordData = new byte[SALT_LENGTH];
+                randomPasswordLength = r.Next(0, 512);
+                byte[] passwordData = new byte[randomPasswordLength];
                 passwordMaker.GetBytes(passwordData);
                 string password = Convert.ToBase64String(passwordData);
 
