@@ -41,7 +41,7 @@ namespace Helpers
 
             // Compare its bytes starting at SALT_LENGTH to the end 
             // (which is the hashed value of the the password only)
-            // to the new salted hash. 
+            // to the new password hash. 
             for (int i = 1; i < HASH_LENGTH; i++)
             {
                 if (hashBytes[i + SALT_LENGTH] != newHashBytes[i])
