@@ -7,6 +7,23 @@ namespace TestPasswordManagement
     [TestClass]
     public class UnitTest1
     {
+
+        const int POSTIONS_TO_BE_TESTED = Helpers.PasswordManagement.HASH_LENGTH;
+
+        [TestMethod]
+        public void TestCreateAndAuthenticate()
+        {
+            string strongPassword = @"1V{QZsbvE/;moo";
+
+            // Create salted hash. 
+            string hash = Helpers.PasswordManagement.CreateSaltedHash(strongPassword);
+
+            // Authenticate the password against the hash. 
+            bool ok = Helpers.PasswordManagement.AuthenticateUserPassword(strongPassword, hash);
+            Assert.IsTrue(ok);
+        }
+
+
         [TestMethod]
         public void TestPasswordLengthsZeroTo512()
         {
@@ -36,7 +53,7 @@ namespace TestPasswordManagement
             // This tests a couple of minutes to complete. 
             int randomPasswordLength;
             Random r = new Random();
-            const int LOOP_TIMES = 5000;
+            const int LOOP_TIMES = 50;
 
             for (int i = 0; i < LOOP_TIMES; i++)
             {

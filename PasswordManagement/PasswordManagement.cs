@@ -42,15 +42,21 @@ namespace Helpers
             // Compare its bytes starting at SALT_LENGTH to the end 
             // (which is the hashed value of the the password only)
             // to the new password hash. 
-            for (int i = 1; i < HASH_LENGTH; i++)
+
+            int newHashBytesPosition = 0;
+            for (int hashBytesPosition = SALT_LENGTH; 
+                     hashBytesPosition < SALT_LENGTH + HASH_LENGTH; 
+                     hashBytesPosition++)
             {
-                if (hashBytes[i + SALT_LENGTH] != newHashBytes[i])
+                if (hashBytes[hashBytesPosition] != newHashBytes[newHashBytesPosition])
                 {
                     return false;
                 }
+                newHashBytesPosition++;
             }
 
-            return true;
+            // Hash seems equal but ensure all bytes were tested. 
+            return newHashBytesPosition == HASH_LENGTH;
         }
 
         public static string CreateSaltedHash(string clearTextPassword)
