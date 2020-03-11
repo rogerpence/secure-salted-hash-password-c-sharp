@@ -23,7 +23,6 @@ namespace TestPasswordManagement
             Assert.IsTrue(ok);
         }
 
-
         [TestMethod]
         public void TestPasswordLengthsZeroTo512()
         {
@@ -59,7 +58,7 @@ namespace TestPasswordManagement
             {
                 // Generate a random password. 
                 RNGCryptoServiceProvider passwordMaker = new RNGCryptoServiceProvider();
-                randomPasswordLength = r.Next(0, 512);
+                randomPasswordLength = r.Next(0, 1024);
                 byte[] passwordData = new byte[randomPasswordLength];
                 passwordMaker.GetBytes(passwordData);
                 string password = Convert.ToBase64String(passwordData);

@@ -21,9 +21,13 @@ namespace Helpers
         // expected length is only significant for knowing what field 
         // length is needed for storing the string value of the 
         // salted hash in a fixed-length field. 
-        public const int HASH_LENGTH = 32; 
-        public const int SALT_LENGTH = 32;
-        public const int EXPECTED_SALTED_HASH_LENGTH = 88;
+
+        // Note these values DO NOT imply a minimum password length. The 
+        // code is tested on passwords up 1024 characters long. 
+
+        public const int HASH_LENGTH = 48;
+        public const int SALT_LENGTH = 48;
+        public const int EXPECTED_SALTED_HASH_LENGTH = 128;
 
         public static bool AuthenticateUserPassword(string clearTextPassword, string saltedHash)
         {
@@ -39,24 +43,15 @@ namespace Helpers
             hashMaker.IterationCount = HASH_ITERATIONS;
             byte[] newHashBytes = hashMaker.GetBytes(HASH_LENGTH);
 
-            // Compare its bytes starting at SALT_LENGTH to the end 
-            // (which is the hashed value of the the password only)
-            // to the new password hash. 
-
-            int newHashBytesPosition = 0;
-            for (int hashBytesPosition = SALT_LENGTH; 
-                     hashBytesPosition < SALT_LENGTH + HASH_LENGTH; 
-                     hashBytesPosition++)
+            for (int i = 0; i < HASH_LENGTH; i++)
             {
-                if (hashBytes[hashBytesPosition] != newHashBytes[newHashBytesPosition])
+                if (hashBytes[i + HASH_LENGTH] != newHashBytes[i])
                 {
                     return false;
                 }
-                newHashBytesPosition++;
             }
 
-            // Hash seems equal but ensure all bytes were tested. 
-            return newHashBytesPosition == HASH_LENGTH;
+            return true;                
         }
 
         public static string CreateSaltedHash(string clearTextPassword)
@@ -82,8 +77,6 @@ namespace Helpers
 
             // When hashBytes is converted to a base 64 string, the 
             // resulting string is longer than SALT_LENGTH + HASH_LENGTH. 
-            // In this code, SALT_LENGTH and HASH_LENGTH are boty 32 bytes 
-            // and the length of the resulting string value is 88 bytes. 
             Array.Copy(saltData, 0, hashBytes, 0, SALT_LENGTH);
             Array.Copy(hashData, 0, hashBytes, SALT_LENGTH, HASH_LENGTH);
 
